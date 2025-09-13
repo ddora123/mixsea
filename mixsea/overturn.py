@@ -371,9 +371,9 @@ def eps_overturn(
     eps[np.isnan(eps)] = background_eps
 
     if return_diagnostics:
-        return eps, N2, diag
+        return Lt, thorpe_disp, eps, N2, diag
     else:
-        return eps, N2
+        return Lt, thorpe_disp, eps, N2
 
 
 def pot_rho_linear(SP, t, rho0=1025, a=2e-4, b=7e-4, SP0=35, t0=15):
@@ -472,11 +472,12 @@ def thorpe_scale(depth, q, dnoise):
 
     for patch in idx_patches:
         # Get patch indices.
-        i0 = patch[0]
-        i1 = patch[1]
+        i0 = patch[0] # start of overturning
+        i1 = patch[1] # end of overturning
         pidx = np.arange(i0, i1 + 1, 1)  # Need +1 for Python indexing
 
         # Thorpe scale is the root mean square thorpe displacement.
+        # displacement of one overturning patch
         Lto = np.sqrt(np.mean(np.square(thorpe_disp[pidx])))
         Lt[pidx] = Lto
 
